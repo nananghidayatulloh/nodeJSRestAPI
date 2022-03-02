@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head><title>Promise</title><meta charset="UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script>
+    // fungsi untuk melakukan request AJAX dan mengembalikan objek Promise
+    function getUsers(url) {
+      return new Promise(function(resolve, reject) {
+        $.ajax({
+            url: url,
+            method: 'get'
+        }).done(function(hasil) {
+            // simpan hasil dari AJAX ke callback 'resolve' dari Promise
+            // untuk kemudian nanti dipakai oleh fungsi '.then'
+            resolve(hasil);
+        });
+      })
+    }
+    // fungsi untuk mengubah data JSON ke list HTML
+    function ubahDataKeHTML(datauser) {
+        var html = '<ul>';
+        $.each( datauser, function( key, value ) {
+            html += '<li>'+value.name+' - '+value.email+'</li>'
+        });
+        html += '</ul>';
+        return html;
+    }
+    // panggil fungsi 'getUsers' dan jalankan fungsi '.then'
+    // argumen dari fungsi '.then' adalah sebuah callback dengan argumen 'hasil'
+    // yang berisikan objek JSON hasil AJAX
+    getUsers('https://jsonplaceholder.typicode.com/users').then(function(hasil) {
+        console.log(hasil);
+        console.log('Janji telah dipenuhi!');
+        var datauserHTML = ubahDataKeHTML(hasil);
+        // tampilkan data user
+        $(document).ready(function() {
+            $('.container').html(datauserHTML);
+        });
+    });
+</script>
+</head>
+<body>
+    <div class="container"></div>
+</body>
+</html>

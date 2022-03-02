@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Promise</title>
+    <meta charset="UTF-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script>
+      var datauser = [];
+      // fungsi untuk melakukan request AJAX
+      function getUsers(url) {
+        $.ajax({
+          url: url,
+          method: "get",
+        }).done(function (hasil) {
+          // isi variabel global datauser dengan hasil dari AJAX
+          datauser = hasil;
+        });
+      }
+      // fungsi untuk mengubah data JSON ke list HTML
+      function ubahDataKeHTML(datauser) {
+        var html = "<ul>";
+        $.each(datauser, function (key, value) {
+          html += "<li>" + value.name + " - " + value.email + "</li>";
+        });
+        html += "</ul>";
+        return html;
+      }
+      // panggil fungsi 'getUsers'
+      getUsers("https://jsonplaceholder.typicode.com/users");
+      // ubah data dari hasil AJAX ke list HTML
+      var datauserHTML = ubahDataKeHTML(datauser);
+      // tampilkan isi variabel ke log
+      console.log(datauser);
+      console.log(datauserHTML);
+      // tampilkan data user
+      $(document).ready(function () {
+        $(".container").html(datauserHTML);
+      });
+    </script>
+  </head>
+  <body>
+    <div class="container"></div>
+  </body>
+</html>
